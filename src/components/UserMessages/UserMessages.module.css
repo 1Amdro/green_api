@@ -1,0 +1,79 @@
+.container {
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 4);
+  background: #fff;
+
+  border-radius: 10px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+
+  display: grid;
+  grid-template-rows: 0.5fr 3fr 0.5fr;
+}
+
+.inactive {
+  display: block;
+}
+
+.title_warning {
+  text-align: center;
+  margin: 50% auto;
+}
+
+.header {
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  background: #01668c;
+}
+.title {
+  font-weight: 100;
+  color: #fff;
+}
+
+.section {
+  background: #e2e3db78;
+}
+
+.footer {
+  padding: 20px 15px;
+  background: #01668c;
+  display: grid;
+  grid-template-columns: 0.9fr 0.2fr;
+  column-gap: 20px;
+  justify-content: space-between;
+}
+
+.input {
+  border-radius: 20px;
+  outline: none;
+  border: none;
+  padding: 0 20px;
+}
+
+.btn_send {
+  border-radius: 20px;
+  border: none;
+  background: #fff;
+  align-self: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.messages_list {
+  list-style: none;
+  padding: 20px 15px;
+}
+
+.message {
+  padding: 20px;
+  border: 2px solid #44b1da;
+  border-radius: 20px;
+  margin: 10px 0;
+}
+
+.message.active {
+  background: #44b1da;
+  color: #fff;
+  border: none;
+}
