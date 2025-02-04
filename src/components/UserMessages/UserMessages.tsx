@@ -26,7 +26,8 @@ export default function UserMessages({ user }: { user: string }) {
   const chatId = user.trim() + "@c.us";
   let notificationId: string | number | null = null;
 
-  const randomNum = Math.floor(Math.random() * 1000);
+  const randomNum =
+    Math.floor(Math.random() * 1000) + Math.floor(Math.random() * 1000);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -134,7 +135,6 @@ export default function UserMessages({ user }: { user: string }) {
             <button onClick={handleSendMsg} className={styles.btn_send}>
               Отправить
             </button>
-            <button onClick={receiveNotification}>Получить</button>
           </footer>
         </>
       ) : (
