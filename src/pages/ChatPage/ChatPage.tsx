@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import UserMessages from "../UserMessages/UserMessages";
-import styles from "./TheChat.module.css";
+import styles from "./ChatPage.module.css";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../../store";
+import UserMessages from "../../components/UserMessages/UserMessages";
 import newChatIcon from "../../assets/chat_new.svg";
 import arrowLeftIcon from "../../assets/arrow-left.svg";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { useNavigate } from "react-router-dom";
 
-function TheChat() {
+function ChatPage() {
   const [newChat, setNewChat] = useState(false);
   const [isRemoved, setIsRemoved] = useState(true);
   const [userToChat, setUserToChat] = useState("");
@@ -75,4 +75,4 @@ function TheChat() {
   );
 }
 
-export default TheChat;
+export default ChatPage;
