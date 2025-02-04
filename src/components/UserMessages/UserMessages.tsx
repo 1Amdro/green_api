@@ -1,9 +1,15 @@
 import styles from "./UserMessages.module.css";
 import userIcon from "../../assets/user_icon.svg";
-import getGreenApi from "../../api/green_api";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
 import { useEffect, useState } from "react";
+import {
+  userDeleteNotification,
+  userReceiveNotification,
+  userSendMessage,
+} from "../../store/userSlice";
+import { data } from "react-router-dom";
 
 export default function UserMessages({ user }: { user: string }) {
   const [message, setMessage] = useState("");
@@ -11,13 +17,15 @@ export default function UserMessages({ user }: { user: string }) {
     { id: string; message: string; type: string }[]
   >([]);
 
+  const dispatch: AppDispatch = useDispatch();
+
   const idInstance = useSelector((state: RootState) => state.user.idInstance);
   const apiTokenInstance = useSelector(
     (state: RootState) => state.user.apiTokenInstance
   );
 
   const chatId = user.trim() + "@c.us";
-  let notificationId: string | null = null;
+  const notificationId: string | null = null;
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -25,81 +33,52 @@ export default function UserMessages({ user }: { user: string }) {
 
   const handleSendMsg = async () => {
     if (user.trim() === "") return;
-    console.log(user);
-    try {
-      const request = await fetch(
-        getGreenApi("sendMessage", idInstance, apiTokenInstance),
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chatId,
-            message,
-          }),
-        }
-      );
+    const randomNum = Math.floor(Math.random() * 1000);
 
-      const response = await request.json();
-      setMessage("");
-      setMessages((prev) => [
-        ...prev,
-        { id: response.idMessage, message, type: "your" },
-      ]);
-      console.log(response);
-      receiveNotification();
-    } catch (error) {
-      console.error(
-        `Something went wrong when sending message: ${(error as Error).message}`
-      );
-    }
+    const res = dispatch(
+      userSendMessage({
+        idInstance,
+        apiTokenInstance,
+        chatId,
+        message,
+      })
+    );
+    console.log(res.arg);
+    setMessage("");
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: res?.arg.idInstance + randomNum,
+        message: res.arg.message,
+        type: "your",
+      },
+    ]);
+
+    receiveNotification();
   };
 
   const deleteNotification = async () => {
-    try {
-      const request = await fetch(
-        getGreenApi("deleteNotification", idInstance, apiTokenInstance) +
-          "/" +
-          notificationId,
-        {
-          method: "DELETE",
-          redirect: "follow",
-        }
-      );
-      const response = await request.json();
-      console.log(response);
-    } catch (error) {
-      console.error(
-        `Something went wrong when deleting notification: ${
-          (error as Error).message
-        }`
-      );
-    }
+    if (!notificationId) return;
+    const res = await dispatch(
+      userDeleteNotification({
+        idInstance,
+        apiTokenInstance,
+        notificationId,
+      })
+    ).unwrap();
+
+    console.log(res);
   };
 
   const receiveNotification = async () => {
-    try {
-      const request = await fetch(
-        getGreenApi("receiveNotification", idInstance, apiTokenInstance) +
-          "?receiveTimeout=5",
-        {
-          method: "GET",
-          redirect: "follow",
-        }
-      );
-      const response = await request.json();
-      notificationId = response.receiptId;
-      console.log(response);
-      deleteNotification();
-      // setMessages((prev) => [...prev, { id: response.idMessage, ...response }]);
-    } catch (error) {
-      console.error(
-        `Something went wrong when getting notification: ${
-          (error as Error).message
-        }`
-      );
-    }
+    const data = await dispatch(
+      userReceiveNotification({
+        idInstance,
+        apiTokenInstance,
+      })
+    ).unwrap();
+    console.log(data);
+    deleteNotification();
   };
 
   useEffect(() => {

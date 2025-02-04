@@ -3,8 +3,11 @@ import { SyntheticEvent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../store";
-import { setIdInstance, setApiTokenInstance } from "../../store/userSlice";
-import { getAuthStatus } from "../../store/userActions";
+import {
+  setIdInstance,
+  setApiTokenInstance,
+  fetchAuthStatus,
+} from "../../store/userSlice";
 
 function AuthPage() {
   const idRef = useRef<HTMLInputElement>(null);
@@ -29,7 +32,7 @@ function AuthPage() {
 
     dispatch(setIdInstance(idInstance));
     dispatch(setApiTokenInstance(apiTokenInstance));
-    dispatch(getAuthStatus(idInstance, apiTokenInstance));
+    dispatch(fetchAuthStatus({ idInstance, apiTokenInstance }));
   };
 
   useEffect(() => {

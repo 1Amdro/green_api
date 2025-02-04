@@ -1,5 +1,5 @@
 import styles from "./ChatPage.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../store";
@@ -11,6 +11,7 @@ function ChatPage() {
   const [newChat, setNewChat] = useState(false);
   const [isRemoved, setIsRemoved] = useState(true);
   const [userToChat, setUserToChat] = useState("");
+  const numRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ function ChatPage() {
   };
 
   const handleEnterChat = () => {
-    const num = (document.getElementById("number") as HTMLInputElement).value;
+    const num = numRef.current?.value;
     if (!num || num.length < 8) return;
     setUserToChat(num);
     handleRemoveChat();
@@ -61,7 +62,12 @@ function ChatPage() {
             </div>
 
             <label htmlFor="number" className={styles["num_field"]}>
-              <input id="number" type="number" placeholder="Введите номер" />
+              <input
+                ref={numRef}
+                id="number"
+                type="number"
+                placeholder="Введите номер"
+              />
             </label>
             <button onClick={handleEnterChat} className={styles.btn_enter_chat}>
               Выбрать
