@@ -70,7 +70,7 @@ export const userDeleteNotification = createAsyncThunk(
     params: {
       idInstance: string;
       apiTokenInstance: string;
-      notificationId: string;
+      notificationId: string | number;
     },
     { rejectWithValue }
   ) {
@@ -110,7 +110,7 @@ export const userReceiveNotification = createAsyncThunk(
           "receiveNotification",
           params?.idInstance,
           params?.apiTokenInstance
-        ) + "?receiveTimeout=5",
+        ),
         {
           method: "GET",
           redirect: "follow",
@@ -118,7 +118,7 @@ export const userReceiveNotification = createAsyncThunk(
       );
 
       const data = await response.json();
-      console.log(data);
+
       return data;
     } catch (error) {
       return rejectWithValue((error as Error).message);

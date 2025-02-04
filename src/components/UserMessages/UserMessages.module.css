@@ -63,6 +63,9 @@
 .messages_list {
   list-style: none;
   padding: 20px 15px;
+  scroll-behavior: auto;
+  overflow-y: auto;
+  height: 65vh;
 }
 
 .message {

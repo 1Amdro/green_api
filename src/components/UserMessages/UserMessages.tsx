@@ -24,7 +24,9 @@ export default function UserMessages({ user }: { user: string }) {
   );
 
   const chatId = user.trim() + "@c.us";
-  const notificationId: string | null = null;
+  let notificationId: string | number | null = null;
+
+  const randomNum = Math.floor(Math.random() * 1000);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -32,9 +34,8 @@ export default function UserMessages({ user }: { user: string }) {
 
   const handleSendMsg = async () => {
     if (user.trim() === "") return;
-    const randomNum = Math.floor(Math.random() * 1000);
 
-    const res = dispatch(
+    dispatch(
       userSendMessage({
         idInstance,
         apiTokenInstance,
@@ -42,31 +43,32 @@ export default function UserMessages({ user }: { user: string }) {
         message,
       })
     );
-    console.log(res.arg);
+
     setMessage("");
     setMessages((prev) => [
       ...prev,
       {
-        id: res?.arg.idInstance + randomNum,
-        message: res.arg.message,
+        id: idInstance + randomNum,
+        message: message,
         type: "your",
       },
     ]);
 
-    receiveNotification();
+    setInterval(() => {
+      receiveNotification();
+    }, 5000);
   };
 
   const deleteNotification = async () => {
     if (!notificationId) return;
-    const res = await dispatch(
+
+    dispatch(
       userDeleteNotification({
         idInstance,
         apiTokenInstance,
         notificationId,
       })
-    ).unwrap();
-
-    console.log(res);
+    );
   };
 
   const receiveNotification = async () => {
@@ -76,8 +78,22 @@ export default function UserMessages({ user }: { user: string }) {
         apiTokenInstance,
       })
     ).unwrap();
-    console.log(data);
-    deleteNotification();
+    notificationId = data?.receiptId;
+
+    await deleteNotification();
+
+    const msg = data?.body?.messageData?.textMessageData?.textMessage;
+    if (!msg) return;
+    const check = messages.find((item) => item.message === msg);
+    if (check) return;
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: idInstance + randomNum,
+        message: msg,
+        type: "other",
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -118,6 +134,7 @@ export default function UserMessages({ user }: { user: string }) {
             <button onClick={handleSendMsg} className={styles.btn_send}>
               Отправить
             </button>
+            <button onClick={receiveNotification}>Получить</button>
           </footer>
         </>
       ) : (
