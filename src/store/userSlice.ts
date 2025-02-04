@@ -165,7 +165,7 @@ const userSlice = createSlice({
       state.authStatus = "";
     });
 
-    builder.addCase(userSendMessage.fulfilled, (state, action) => {
+    builder.addCase(userSendMessage.fulfilled, (state) => {
       state.status = "fulfilled";
     });
     builder.addCase(userSendMessage.rejected, (state, action) => {
@@ -175,7 +175,7 @@ const userSlice = createSlice({
       state.status = "pending";
     });
 
-    builder.addCase(userDeleteNotification.fulfilled, (state, action) => {
+    builder.addCase(userDeleteNotification.fulfilled, (state) => {
       state.status = "fulfilled";
     });
     builder.addCase(userDeleteNotification.rejected, (state, action) => {
