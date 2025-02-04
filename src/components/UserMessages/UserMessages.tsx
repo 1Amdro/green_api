@@ -9,7 +9,6 @@ import {
   userReceiveNotification,
   userSendMessage,
 } from "../../store/userSlice";
-import { data } from "react-router-dom";
 
 export default function UserMessages({ user }: { user: string }) {
   const [message, setMessage] = useState("");
