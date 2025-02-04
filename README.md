@@ -1,9 +1,11 @@
 # React + TypeScript + Vite
 
-## Запуск проекта на локалке
+## Запуск проекта на локалке:
 
-### npm install
+### заходим в папку проекта, используем там cmd и вводим следующие команды:
 
-### npm run dev
+#### npm install
 
-### Кликаем на Local: http://localhost...
+#### npm run dev
+
+#### Кликаем на Local: http://localhost...
